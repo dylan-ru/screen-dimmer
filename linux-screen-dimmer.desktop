@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Linux Screen Dimmer
+GenericName=Screen Dimmer
+Comment=Reduce screen brightness beyond hardware limits
+Exec=linux-screen-dimmer
+Icon=display-brightness-symbolic
+Terminal=false
+Categories=Utility;GTK;
+StartupNotify=true
+Keywords=screen;brightness;dimmer;overlay;

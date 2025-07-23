@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|upgrade|deconfigure)
+        # Clean up any running instances
+        pkill -f linux-screen-dimmer || true
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0

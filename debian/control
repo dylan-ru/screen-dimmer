@@ -1,0 +1,17 @@
+Source: linux-screen-dimmer
+Section: utils
+Priority: optional
+Maintainer: Linux Screen Dimmer Team <example@example.com>
+Build-Depends: debhelper (>= 11), dh-python, python3-all, python3-setuptools
+Standards-Version: 4.1.3
+Homepage: https://github.com/example/linux-screen-dimmer
+X-Python3-Version: >= 3.6
+
+Package: linux-screen-dimmer
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, python3-gi, gir1.2-gtk-3.0, gir1.2-appindicator3-0.1
+Description: Reduce screen brightness beyond hardware limits
+ Linux Screen Dimmer provides a way to reduce screen brightness
+ beyond hardware limits by creating a transparent overlay.
+ Features include system tray control, multi-monitor support,
+ and persistent settings.
