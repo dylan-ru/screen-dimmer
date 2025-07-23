@@ -35,16 +35,11 @@ class OverlayManager:
         # Get the default dim level and color from settings
         self.dim_level = settings.get('dim_level', 0.3)
         
-        # Always use black as the color, regardless of settings
-        self.color = DEFAULT_COLOR  # (0, 0, 0) - pure black
+        # Get the color from settings or use default if not specified
+        self.color = settings.get('color', DEFAULT_COLOR)
         
         # Get per-monitor settings if available
         self.monitor_settings = settings.get('monitors', {})
-        
-        # Ensure all monitor settings use black as the color
-        for monitor_id in self.monitor_settings:
-            if 'color' in self.monitor_settings[monitor_id]:
-                self.monitor_settings[monitor_id]['color'] = DEFAULT_COLOR
         
         # Create overlay windows for all connected displays
         self.create_overlays()
@@ -66,8 +61,8 @@ class OverlayManager:
             # Check if we have specific settings for this monitor
             monitor_dim_level = self.monitor_settings.get(monitor_id, {}).get('dim_level', self.dim_level)
             
-            # Always use black as the color
-            monitor_color = DEFAULT_COLOR
+            # Use monitor-specific color or global color
+            monitor_color = self.monitor_settings.get(monitor_id, {}).get('color', self.color)
             
             # Create the overlay window
             overlay = OverlayWindow(
@@ -133,25 +128,25 @@ class OverlayManager:
             monitor_id (str, optional): Monitor ID to set the color for.
                 If None, set for all monitors.
         """
-        # Update the global color (but always use black)
-        self.color = DEFAULT_COLOR
+        # Update the global color
+        self.color = color
         
         if monitor_id is None:
             # Update all overlays
             for overlay in self.overlays.values():
-                overlay.set_color(DEFAULT_COLOR)
+                overlay.set_color(color)
             
             # Update settings
-            self.settings['color'] = DEFAULT_COLOR
+            self.settings['color'] = color
         else:
             # Update specific overlay
             if monitor_id in self.overlays:
-                self.overlays[monitor_id].set_color(DEFAULT_COLOR)
+                self.overlays[monitor_id].set_color(color)
                 
                 # Update monitor-specific settings
                 if monitor_id not in self.monitor_settings:
                     self.monitor_settings[monitor_id] = {}
-                self.monitor_settings[monitor_id]['color'] = DEFAULT_COLOR
+                self.monitor_settings[monitor_id]['color'] = color
                 self.settings['monitors'] = self.monitor_settings
     
     def get_settings(self):
@@ -161,14 +156,8 @@ class OverlayManager:
         Returns:
             dict: Current settings including dim_level, color, and per-monitor settings
         """
-        # Ensure color is always black before returning settings
-        self.settings['color'] = DEFAULT_COLOR
-        
-        # Ensure all monitor settings use black as the color
-        for monitor_id in self.monitor_settings:
-            if 'color' in self.monitor_settings[monitor_id]:
-                self.monitor_settings[monitor_id]['color'] = DEFAULT_COLOR
-        
+        # Update settings with current values
+        self.settings['color'] = self.color
         self.settings['monitors'] = self.monitor_settings
         
         return self.settings
@@ -190,8 +179,8 @@ class OverlayManager:
         # Check if we have specific settings for this monitor
         monitor_dim_level = self.monitor_settings.get(monitor_id, {}).get('dim_level', self.dim_level)
         
-        # Always use black as the color
-        monitor_color = DEFAULT_COLOR
+        # Use monitor-specific color or global color
+        monitor_color = self.monitor_settings.get(monitor_id, {}).get('color', self.color)
         
         # Create the overlay window
         overlay = OverlayWindow(
